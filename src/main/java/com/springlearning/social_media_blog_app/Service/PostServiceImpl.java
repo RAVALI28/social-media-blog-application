@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -28,17 +27,14 @@ public class PostServiceImpl implements PostService{
         Post savedPost = postRepository.save(post);
 
         //Map Post Entity to Post Dto
-        PostDto savedPostDto = mapEntityToDto(savedPost);
-        return savedPostDto;
-
+       return mapEntityToDto(savedPost);
     }
 
     @Override
     public List<PostDto> getAllPosts() {
         List<Post> postList = postRepository.findAll();
         //Map Post Entity to Post Dto
-      List<PostDto> postDtoList =  postList.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
-        return postDtoList;
+      return  postList.stream().map(this::mapEntityToDto).collect(Collectors.toList());
     }
 
     @Override
