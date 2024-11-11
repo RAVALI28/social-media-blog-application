@@ -3,8 +3,12 @@ package com.springlearning.social_media_blog_app.Service;
 import com.springlearning.social_media_blog_app.DTO.PostDto;
 import com.springlearning.social_media_blog_app.Entity.Post;
 import com.springlearning.social_media_blog_app.Exception.ResourceNotFoundException;
+import com.springlearning.social_media_blog_app.PayLoad.PostResponse;
 import com.springlearning.social_media_blog_app.Repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +35,29 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> postList = postRepository.findAll();
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        //List<Post> postList = postRepository.findAll();
+        Page<Post> posts = postRepository.findAll(pageable);
+        List<Post> postList = posts.getContent();
+
         //Map Post Entity to Post Dto
-      return  postList.stream().map(this::mapEntityToDto).collect(Collectors.toList());
+      //return  postList.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
+       List<PostDto> postDtoList = postList.stream().map(post -> mapEntityToDto(post)).collect(Collectors.toList());
+
+       //Customize the Post Resource Response
+        PostResponse postResponse = PostResponse
+                .builder()
+                .content(postDtoList)
+                .pageNo(posts.getNumber())
+                .pageSize(posts.getSize())
+                .totalElements(posts.getTotalElements())
+                .totalPages(posts.getTotalPages())
+                .isLastPage(posts.isLast())
+                .build();
+
+        return postResponse;
     }
 
     @Override

@@ -3,27 +3,31 @@ package com.springlearning.social_media_blog_app.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.lang.String;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
-@Table(name = "Posts")
+@Table(name = "Post")
 public class Post {
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name= "Title")
+    @Column(name= "title")
     private String title;
 
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "Content")
+    @Column(name = "content")
     private String content;
 
 }
