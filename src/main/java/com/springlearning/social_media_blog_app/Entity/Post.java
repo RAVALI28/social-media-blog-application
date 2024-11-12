@@ -4,6 +4,9 @@ package com.springlearning.social_media_blog_app.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.lang.String;
+import java.util.HashSet;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +33,8 @@ public class Post {
     @Column(name = "content")
     private String content;
 
+    //Relation between post and comments (OneToMany)
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
 }
